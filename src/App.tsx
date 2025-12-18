@@ -7,7 +7,8 @@ import {
   AlertCircle, 
   FileText,
   Braces,
-  HelpCircle
+  HelpCircle,
+  ClipboardPaste
 } from 'lucide-react';
 import { MainLayout } from './components/MainLayout';
 import { TextEditor } from './components/TextEditor';
@@ -123,6 +124,17 @@ function App() {
     }
   };
 
+  const handlePaste = async () => {
+    try {
+      const content = await navigator.clipboard.readText();
+      if (content) {
+        handleTextChange(content);
+      }
+    } catch (err) {
+      console.error('Failed to paste:', err);
+    }
+  };
+
   const clearAll = () => {
     setText('');
     setJson('');
@@ -138,6 +150,17 @@ function App() {
               <Braces className="w-5 h-5 text-white" />
             </div>
             <h1 className="font-bold text-gray-800 text-lg">JSON Meta Tool</h1>
+          </div>
+
+          <div className="flex-1 flex justify-center">
+            <button
+              onClick={handlePaste}
+              className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors shadow-sm"
+              title="粘贴剪贴板内容到编辑器"
+            >
+              <ClipboardPaste className="w-4 h-4" />
+              <span>粘贴内容</span>
+            </button>
           </div>
           
           <div className="flex items-center gap-2">
